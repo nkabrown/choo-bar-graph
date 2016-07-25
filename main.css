@@ -2,3 +2,17 @@ main {
   display: flex;
   justify-content: center;
 }
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+text {
+  stroke: #fff;
+  fill: #fff;
+  font-family: sans-serif;
+}

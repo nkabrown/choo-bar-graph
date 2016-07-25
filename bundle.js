@@ -15,11 +15,15 @@ const app = choo({
 const width = 960;
 const height = 500;
 
+const y = scale.scaleLinear()
+    .domain([0, 0.12702])
+    .range([height, 0]);
+
 app.model({
   state: { dataset: [] },
   subscriptions: [
     (send, done) => {
-      request.tsv('data.tsv', data => {
+      request.tsv('data.tsv', type, data => {
         send('load', { payload: data }, (err) => {
           if (err) return done(err);
         });
@@ -27,6 +31,11 @@ app.model({
           if (err) return done(err);
         });
       });
+
+      function type(d) {
+        d.frequency = +d.frequency;
+        return d;
+      }
     }
   ],
   effects: {
@@ -34,16 +43,32 @@ app.model({
   },
   reducers: {
     load: (data, state) => {
-      return { dataset: data.payload, max: Math.max(...data.payload.map(datum => datum.frequency)), barWidth: width / data.payload.length, y: scale.scaleLinear().domain([0, state.max]).range([height, 0]) };
+      return { dataset: data.payload, max: Math.max(...data.payload.map(datum => datum.frequency)), barWidth: width / data.payload.length, y: scale.scaleLinear().domain([0, 0.12702]).range([height, 0]) };
     }
   }
 });
 
 const view = (state, prev, send) => {
+  const bars = state => `
+    ${state.dataset.map((el, i) => `
+      <g transform="translate(${i * state.barWidth}, 0)" key=${el.letter}>
+        <rect y=${y(el.frequency)} height=${height - y(el.frequency)} width=${state.barWidth - 1}/>
+        <text x=${state.barWidth / 2} y=${y(el.frequency) + 3} dy=".71em"> 
+          ${el.letter}  
+        </text>
+      </g>`
+      )}
+  `;
+
   return html`
-    <svg width=${width} height=${height}>
-    </svg>`
+    <main>
+      <svg width=${width} height=${height}>
+        ${bars(state)}
+      </svg>
+    </main>`
+
 }
+
 
 app.router((route) => [
   route('/', view)
