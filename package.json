@@ -1,0 +1,25 @@
+{
+  "name": "choo-bars",
+  "version": "0.0.1",
+  "description": "d4 bar graph with choo",
+  "main": "bars.js",
+  "scripts": {
+    "start": "budo bars.js:bundle.js --live",
+    "dev": "browserify bars.js --debug | exorcist bundle.js.map > bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nathan Brown <nkabrown@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "choo-log": "^1.4.0",
+    "exorcist": "^0.4.0",
+    "tape": "^4.6.0"
+  },
+  "dependencies": {
+    "browserify": "^13.0.1",
+    "budo": "^8.3.0",
+    "choo": "^3.2.0",
+    "d3-request": "^1.0.1",
+    "d3-scale": "^1.0.1"
+  }
+}
