@@ -33,15 +33,17 @@ app.model({
   },
   reducers: {
     load: (data, state) => {
-      return { dataset: data.payload };
+      return { dataset: data.payload, max: Math.max(...data.payload.map(datum => datum.frequency)), barWidth: width / data.payload.length, y: scale.scaleLinear().domain([0, state.max]).range([height, 0]) };
     }
   }
 });
 
 const view = (state, prev, send) => {
   return html`
-    <svg></svg>
-  `
+    <main>
+      <svg width=${width} height=${height}>
+      </svg>
+    </main>`
 }
 
 app.router((route) => [
